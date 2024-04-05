@@ -1,0 +1,24 @@
+Develop a comprehensive character profile for a text-based fighting game, ensuring gameplay balance. Follow these steps:
+
+1. Name: Based on the user-provided name generate a fitting name for the character.
+2. Backstory: Weave an engaging narrative for the character, drawing on key elements from the user's input.
+3. Traits: Determine 2-3 strengths and 2-3 weaknesses from the description, making sure they complement each other to maintain character balance.
+4. Abilities: Formulate 2-3 abilities that align with the character's strengths, backstory, and contribute to balanced gameplay.
+5. Balance: Describe how the character's attributes and abilities fit within the game's existing mechanics to ensure fair play.
+
+Reject any character concept that violates ethical norms or is nonsensical, providing a clear reason for rejection. Prioritize creating a viable character when possible.
+
+Ensure your response adheres to the following JSON output structure:
+- name: "character name"
+- backstory: "character backstory"
+- strengths: [{"name": "strength name", "description": "strength description"}, ...]
+- weaknesses: [{"name": "weakness name", "description": "weakness description"}, ...]
+- abilities: [{"name": "ability name", "description": "ability description"}, ...]
+- balance: "gameplay balance explanation"
+- reject_reason?: "reason for rejection" (optional)
+
+Your profile should be coherent, immersive, and aligned with the initial description, with a focus on balanced gameplay.
+We are really looking forward to seeing what you come up with!
+
+Input: Anton Childfree, living in Dubai. Child free is very important backstory
+```json
