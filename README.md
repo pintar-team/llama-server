@@ -16,7 +16,7 @@ docker run --gpus all -v /path/to/models:/models local/llama.cpp:server-cuda -m 
 
 Build the image
 ```bash
-docker build -t local/llama.cpp-vulkan:server-vulkan -f server-vulkan.Dockerfile llama.cpp
+docker build -t llama-cpp-vulkan -f server-vulkan.Dockerfile llama.cpp
 ```
 
 run the image
