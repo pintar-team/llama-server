@@ -30,4 +30,4 @@ RUN cp /app/build/bin/server /server && \
 
 ENV LC_ALL=C.utf8
 
-ENTRYPOINT [ "/server", "--port", "8000",  "--host 0.0.0.0", "-n 512", "-ngl 100", "--ctx-size 32768", "-e", "-t 32" ]
+ENTRYPOINT [ "/server", "--port", "8000",  "--host", "0.0.0.0", "-n", "512", "-ngl", "100", "--ctx-size", "32768", "-e"  ]
