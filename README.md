@@ -4,7 +4,7 @@ CUDA:
 
 ### Build local image
 ```bash
-docker build -t local/llama.cpp:server-cuda -f server-cuda.Dockerfile .
+docker build -t local/llama.cpp:server-cuda -f server-cuda.Dockerfile llama.cpp
 ```
 
 Run model
@@ -16,7 +16,7 @@ docker run --gpus all -v /path/to/models:/models local/llama.cpp:server-cuda -m 
 
 Build the image
 ```bash
-docker build -t local/llama.cpp:server-vulkan -f main-vulkan.Dockerfile .
+docker build -t local/llama.cpp:server-vulkan -f server-vulkan.Dockerfile llama.cpp
 ```
 
 run the image
