@@ -21,15 +21,8 @@ docker build -t llama-cpp-vulkan -f server-vulkan.Dockerfile llama.cpp
 
 run the image
 ```bash
-./bin/server -m ../../westlake-7b-v2.Q5_K_M.gguf --port 8000 --host 0.0.0.0 -n 512 -ngl 100 --ctx-size 32768 --embedding -t 32
-
 docker run -it --rm \
     llama-cpp-vulkan \
-    -m "models/westlake-7b-v2.Q5_K_M.gguf" \
-    -p "Building a website can be done in 10 simple steps:" \
-    -n 400 \
-    -e \
-    -ngl 33 \
-    -t 32
+    -m "models/westlake-7b-v2.Q5_K_M.gguf"
 ```
 
