@@ -31,3 +31,11 @@ docker run -p 8000:8000 \
     -m "/app/models/westlake-7b-v2.q5_k_m.gguf"
 ```
 
+try request
+```bash
+curl --request POST \
+    --url http://localhost:8000/completion \
+    --header "Content-Type: application/json" \
+    --data '{"prompt": "Building a website can be done in 10 simple steps:","n_predict": 128}'
+```
+
