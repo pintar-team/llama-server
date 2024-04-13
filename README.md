@@ -23,8 +23,10 @@ run the image
 ```bash
 docker run -p 8000:8000 \
     -it --rm \
-    -v "$(pwd)/llama.cpp:/app:Z" \
+    -v "$(pwd)/llama.cpp:/app:z" \
+    --device /dev/dri/renderD128:/dev/dri/renderD128 \
+    --device /dev/dri/card1:/dev/dri/card1 \
     llama-cpp-vulkan \
-    -m "/app/models/westlake-7b-v2.Q5_K_M.gguf"
+    -m "/app/models/westlake-7b-v2.q5_k_m.gguf"
 ```
 
