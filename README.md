@@ -21,8 +21,10 @@ docker build -t llama-cpp-vulkan -f server-vulkan.Dockerfile llama.cpp
 
 run the image
 ```bash
-docker run -it --rm \
+docker run -p 8000:8000 \
+    -it --rm \
+    -v "$(pwd)/llama.cpp:/app:Z" \
     llama-cpp-vulkan \
-    -m "models/westlake-7b-v2.Q5_K_M.gguf"
+    -m "/app/models/westlake-7b-v2.Q5_K_M.gguf"
 ```
 
