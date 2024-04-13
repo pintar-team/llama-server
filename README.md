@@ -22,6 +22,7 @@ docker build -t llama-cpp-vulkan -f server-vulkan.Dockerfile llama.cpp
 run the image
 ```bash
 docker run -p 8000:8000 \
+    -d
     -it --rm \
     -v "$(pwd)/llama.cpp:/app:z" \
     --device /dev/dri/renderD128:/dev/dri/renderD128 \
