@@ -19,7 +19,7 @@ ENV LLAMA_CURL=1
 WORKDIR /app
 COPY . .
 
-RUN make -j$(nproc)
+RUN make -j${NPROC}
 
 FROM ${BASE_CUDA_RUN_CONTAINER} as runtime
 
