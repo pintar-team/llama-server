@@ -11,6 +11,7 @@ Run model
 ```bash
 docker run -p 8000:8000 \
     --gpus all \
+    NPROC=$(nproc) \
     -v "$(pwd):/app:z" \
     llama-cpp-cuda \
     -m "/app/westlake-7b-v2.Q5_K_M.gguf"

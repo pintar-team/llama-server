@@ -6,6 +6,8 @@ ARG BASE_CUDA_RUN_CONTAINER=nvidia/cuda:${CUDA_VERSION}-runtime-ubuntu${UBUNTU_V
 FROM ${BASE_CUDA_DEV_CONTAINER} as build
 
 ARG CUDA_DOCKER_ARCH=all
+ARG NPROC=4
+ENV NPROC=${NPROC}
 
 RUN apt-get update && \
     apt-get install -y build-essential git libcurl4-openssl-dev cmake
@@ -30,4 +32,4 @@ COPY --from=build /app/server /server
 
 ENV LC_ALL=C.utf8
 
-ENTRYPOINT [ "/server", "--port", "8000",  "--host", "0.0.0.0", "-n", "512", "-ngl", "100", "-c", "32768", "--embedding", "-t", $(nproc)  ]
+ENTRYPOINT [ "/server", "--port", "8000",  "--host", "0.0.0.0", "-n", "512", "-ngl", "100", "-c", "32768", "--embedding", "-t", "${NPROC}"  ]
