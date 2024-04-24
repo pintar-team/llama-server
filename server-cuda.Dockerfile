@@ -6,7 +6,7 @@ ARG BASE_CUDA_RUN_CONTAINER=nvidia/cuda:${CUDA_VERSION}-runtime-ubuntu${UBUNTU_V
 FROM ${BASE_CUDA_DEV_CONTAINER} as build
 
 ARG CUDA_DOCKER_ARCH=all
-ARG NPROC=4
+ARG NPROC=8
 ENV NPROC=${NPROC}
 
 RUN apt-get update && \
