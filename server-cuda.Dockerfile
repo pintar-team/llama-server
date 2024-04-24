@@ -12,11 +12,7 @@ FROM ${BASE_CUDA_DEV_CONTAINER} as build
 ARG CUDA_DOCKER_ARCH=all
 
 RUN apt-get update && \
-    apt-get install -y build-essential git libcurl4-openssl-dev
-
-WORKDIR /app
-
-COPY . .
+    apt-get install -y build-essential git libcurl4-openssl-dev cmake
 
 # Set nvcc architecture
 ENV CUDA_DOCKER_ARCH=${CUDA_DOCKER_ARCH}
@@ -25,13 +21,24 @@ ENV LLAMA_CUDA=1
 # Enable cURL
 ENV LLAMA_CURL=1
 
-RUN make
+WORKDIR /app
+COPY . .
+#RUN mkdir build && \
+#    cd build && \
+#    cmake .. -DLLAMA_CUDA=ON && \
+#    cmake --build . --config Release --target server -j8
+
+RUN make -j$(nproc)
 
 FROM ${BASE_CUDA_RUN_CONTAINER} as runtime
 
 RUN apt-get update && \
     apt-get install -y libcurl4-openssl-dev
 
+WORKDIR /
+
 COPY --from=build /app/server /server
 
-ENTRYPOINT [ "/server" ]
+ENV LC_ALL=C.utf8
+
+ENTRYPOINT [ "/server", "--port", "8000",  "--host", "0.0.0.0", "-n", "512", "-ngl", "100", "-c", "32768", "--embedding"  ]
