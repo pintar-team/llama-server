@@ -4,7 +4,7 @@ CUDA:
 
 ### Build local image
 ```bash
-docker build -t local/llama.cpp:server-cuda -f server-cuda.Dockerfile llama.cpp
+docker build -t llama-cpp-cuda -f server-cuda.Dockerfile llama.cpp
 ```
 
 Run model
