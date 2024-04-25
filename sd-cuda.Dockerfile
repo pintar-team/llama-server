@@ -23,7 +23,7 @@ RUN mkdir build && cd build && cmake .. -DSD_CUBLAS=ON && cmake --build . --conf
 FROM ubuntu:$UBUNTU_VERSION as runtime
 
 RUN apt-get update && \
-    apt-get install -y libcurl4-openssl-dev libcudart1
+    apt-get install -y libcurl4-openssl-dev libcudart11.0
 
 COPY --from=build /sd.cpp/build/bin/sd /sd
 
