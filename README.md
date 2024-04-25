@@ -45,3 +45,23 @@ curl --request POST \
     --data '{"prompt": "Building a website can be done in 10 simple steps:","n_predict": 128}'
 ```
 
+
+### stable-diffusion
+
+```bash
+docker build --build-arg NPROC=$(nproc)  -t sd-cpu -f sd-cuda.Dockerfile stable-diffusion.cpp
+```
+
+run the image
+```bash
+docker run -p 8000:8000 \
+            --gpus all \
+            -u $(id -u):$(id -g) \
+            -v "$(pwd):/app" \
+            sd-cuda \
+            -m "/app/v1-5-pruned-emaonly.ckpt" \
+            -p "city cyberpunk" \
+            -o "/app/out.png" \
+            -v \
+            --type f32
+```
