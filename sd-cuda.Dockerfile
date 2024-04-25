@@ -14,7 +14,7 @@ RUN apt-get update && \
 
 ENV CUDA_DOCKER_ARCH=${CUDA_DOCKER_ARCH}
 
-WORKDIR /sd.cpp
+WORKDIR /app
 
 COPY . .
 
@@ -25,7 +25,7 @@ FROM ubuntu:$UBUNTU_VERSION as runtime
 RUN apt-get update && \
     apt-get install -y libcurl4-openssl-dev libcudart11.0 libcublas11
 
-COPY --from=build /sd.cpp/build/bin/sd /sd
+COPY --from=build /app/build/bin/sd /sd
 
 ENV LC_ALL=C.utf8
 
