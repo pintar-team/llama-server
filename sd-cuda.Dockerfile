@@ -23,7 +23,7 @@ RUN mkdir build && cd build && cmake .. -DSD_CUBLAS=ON && cmake --build . --conf
 FROM ubuntu:$UBUNTU_VERSION as runtime
 
 RUN apt-get update && \
-    apt-get install -y libcurl4-openssl-dev nvidia-cuda-toolkit 
+    apt-get install -y libcurl4-openssl-dev libcudart1
 
 COPY --from=build /sd.cpp/build/bin/sd /sd
 
