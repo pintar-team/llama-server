@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  llama:
+    build: ./server-cuda.Dockerfile
+    ports:
+      - "8000:8000"
+
+  nginx:
+    build: ./nginx.Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - llama
