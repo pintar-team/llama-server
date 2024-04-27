@@ -17,9 +17,9 @@ ENV LLAMA_CUDA=1
 ENV LLAMA_CURL=1
 
 WORKDIR /app
-COPY . .
+#COPY . .
 
-RUN make -j${NPROC}
+RUN make clean && make -j${NPROC}
 
 FROM ${BASE_CUDA_RUN_CONTAINER} as runtime
 

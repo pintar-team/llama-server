@@ -9,7 +9,8 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./llama.cpp:/app/llama.cpp
+      - ./llama.cpp:/app
+    working_dir: /app
 
   nginx:
     build: ./nginx
