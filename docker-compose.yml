@@ -2,9 +2,14 @@ version: '3'
 
 services:
   llama:
-    build: ./llama-cuda
+    build:
+      context: ./llama-cuda
+      args:
+        - NPROC=8
     ports:
       - "8000:8000"
+    volumes:
+      - ./llama.cpp:/app/llama.cpp
 
   nginx:
     build: ./nginx
