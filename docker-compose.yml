@@ -19,8 +19,6 @@ services:
     volumes:
       - "./:/app"
     command: -m "/app/westlake-7b-v2.Q5_K_M.gguf"
-    environment:
-      - NPROC=${NPROC:-8}
 
   nginx:
     build: ./nginx
