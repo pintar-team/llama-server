@@ -17,7 +17,7 @@ ENV LLAMA_CUDA=1
 ENV LLAMA_CURL=1
 
 WORKDIR /app
-COPY . .
+COPY ../llama.cpp /app
 
 RUN make -j${NPROC}
 
