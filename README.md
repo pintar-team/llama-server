@@ -1,10 +1,39 @@
 # Docker files for (CUDA, Vulkan) Server.
 
+## Docker compose
+
+for build nginx need generate or provide certificate, in nginx dir
+```bash
+openssl genrsa -out nginx/cert.key  2048
+openssl req -new -x509 -days 365 -key nginx/cert.key -out cert.crt
+```
+
+building
+```bash
+# Full build
+docker-compose build
+# or wihtout cache
+docker-compose build --no-cache
+# or build only one service
+docker-compose build nginx --no-cache
+```
+
+Run
+```bash
+docker-compose up
+```
+
+Check images
+```bash
+docker-compose ps
+```
+
+
 CUDA:
 
 ### Build local image
 ```bash
-docker build --build-arg NPROC=$(nproc) -t llama-cpp-cuda -f server-cuda.Dockerfile llama.cpp
+docker build --build-arg -t llama-cpp-cuda -f llama-cuda llama.cpp
 ```
 
 Run model
@@ -21,7 +50,7 @@ docker run -p 8000:8000 \
 
 Build the image
 ```bash
-docker build -t llama-cpp-vulkan -f server-vulkan.Dockerfile llama.cpp
+docker build -t llama-cpp-vulkan -f llama-vk llama.cpp
 ```
 
 run the image
@@ -65,3 +94,4 @@ docker run -p 8000:8000 \
             -v \
             --type f32
 ```
+
