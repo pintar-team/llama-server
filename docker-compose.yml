@@ -20,14 +20,14 @@ services:
       - "./:/app"
     command: -m "/app/westlake-7b-v2.Q5_K_M.gguf"
 
-  sd-cuda:
+  sd:
     build:
       context: ./
       dockerfile: ./sd-cuda/Dockerfile
       args:
         - NPROC=8
     ports:
-      - "8001:8001"
+      - "8080:8080"
     deploy:
       resources:
         reservations:
