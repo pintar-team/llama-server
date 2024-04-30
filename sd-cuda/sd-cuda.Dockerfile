@@ -10,13 +10,13 @@ ARG NPROC=8
 ENV NPROC=${NPROC}
 
 RUN apt-get update && \
-    apt-get install -y build-essential git libcurl4-openssl-dev cmake
+    apt-get install -y build-essential git libcurl4-openssl-dev cmake git
 
 ENV CUDA_DOCKER_ARCH=${CUDA_DOCKER_ARCH}
 
-WORKDIR /app
+RUN git clone https://github.com/pintar-team/stable-diffusion.cpp.git --recursive 
 
-COPY . .
+WORKDIR /app/stable-diffusion.cpp
 
 RUN mkdir build && cd build && cmake .. -DSD_CUBLAS=ON && cmake --build . --config Release -j${NPROC}
 
@@ -25,9 +25,9 @@ FROM ubuntu:$UBUNTU_VERSION as runtime
 RUN apt-get update && \
     apt-get install -y libcurl4-openssl-dev nvidia-cuda-toolkit
 
-COPY --from=build /app/build/bin/sd /sd
+COPY --from=build /app/build/bin/server /server
 
 ENV LC_ALL=C.utf8
 
-ENTRYPOINT [ "/sd" ]
+ENTRYPOINT [ "/server" ]
 
