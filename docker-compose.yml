@@ -17,7 +17,7 @@ services:
               count: all
               capabilities: [gpu]
     volumes:
-      - "~/projects/models/:/app"
+      - "/models/:/app"
     command: -m "/app/westlake-7b-v2.Q5_K_M.gguf"
 
   sd:
@@ -36,8 +36,8 @@ services:
               count: all
               capabilities: [gpu]
     volumes:
-      - "~/projects/models//app"
-    command: -m "/app/westlake-7b-v2.Q5_K_M.gguf"
+      - "/models/:/app"
+    command: -m "/app/v1-5-pruned-emaonly.ckpt"
 
   nginx:
     build: ./nginx
