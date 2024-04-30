@@ -30,3 +30,4 @@ COPY --from=build /app/build/bin/sd /sd
 ENV LC_ALL=C.utf8
 
 ENTRYPOINT [ "/sd" ]
+
