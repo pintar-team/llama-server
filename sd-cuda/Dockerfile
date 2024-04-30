@@ -14,9 +14,8 @@ RUN apt-get update && \
 
 ENV CUDA_DOCKER_ARCH=${CUDA_DOCKER_ARCH}
 
-RUN git clone https://github.com/pintar-team/stable-diffusion.cpp.git --recursive 
-
-WORKDIR /app/stable-diffusion.cpp
+WORKDIR /app
+COPY ./stable-diffusion.cpp /app
 
 RUN mkdir build && cd build && cmake .. -DSD_CUBLAS=ON && cmake --build . --config Release -j${NPROC}
 
