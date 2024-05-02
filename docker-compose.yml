@@ -2,6 +2,7 @@ version: '3'
 
 services:
   llama:
+    restart: always
     build:
       context: ./
       dockerfile: ./llama-cuda/Dockerfile
@@ -20,27 +21,28 @@ services:
       - "/models/:/app"
     command: -m "/app/westlake-7b-v2.Q5_K_M.gguf"
 
-  sd:
-    build:
-      context: ./
-      dockerfile: ./sd-cuda/Dockerfile
-      args:
-        - NPROC=8
-    ports:
-      - "8080:8080"
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-    volumes:
-      - "/models/:/app"
-    command: -m "/app/v1-5-pruned-emaonly.ckpt"
-
+  # sd:
+  #   build:
+  #     context: ./
+  #     dockerfile: ./sd-cuda/Dockerfile
+  #     args:
+  #       - NPROC=8
+  #   ports:
+  #     - "8080:8080"
+  #   deploy:
+  #     resources:
+  #       reservations:
+  #         devices:
+  #           - driver: nvidia
+  #             count: all
+  #             capabilities: [gpu]
+  #   volumes:
+  #     - "/models/:/app"
+  #   command: -m "/app/v1-5-pruned-emaonly.ckpt"
+  
   nginx:
     build: ./nginx
+    restart: always
     ports:
       - "80:80"
       - "443:443"
