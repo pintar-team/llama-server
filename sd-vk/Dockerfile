@@ -23,6 +23,4 @@ COPY ./sd-server /app/
 RUN python3 -m pip install --no-cache-dir -r /app/requirements.txt
 RUN python3 -m pip uninstall py3nvml pynvml -y
 
-EXPOSE ${SD_PORT}
-
-CMD ["python3", "server.py", "--port", "8001"]
+CMD ["python3", "server.py"]
