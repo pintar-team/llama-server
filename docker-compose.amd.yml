@@ -11,7 +11,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - "${LLAMA_MODEL_PATH}:/app"
+      - "${LLAMA_MODEL_PATH}:/app/models"
     command: ${LLAMA_ARGS}
     devices:
       - /dev/dri:/dev/dri
@@ -23,7 +23,7 @@ services:
     ports:
       - "8001:8001"
     volumes:
-      - "${SD_MODEL_PATH}:/app"
+      - "${SD_MODEL_PATH}:/app/models"
     devices:
       - /dev/dri:/dev/dri
 

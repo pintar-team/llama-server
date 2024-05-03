@@ -18,10 +18,10 @@ LLAMA_CUDA_DOCKERFILE=./llama-cuda/Dockerfile
 LLAMA_VK_DOCKERFILE=./llama-vk/Dockerfile
 SD_CUDA_DOCKERFILE=./sd-cuda/Dockerfile
 NGINX_SECRET=your_secret_token
-LLAMA_ARGS=--port 8000 --host 0.0.0.0 -n 8192 -ngl 100 -c 32768 --embedding -t 4 -m "/app/llama-3-8b-instruct-1048k.Q6_K.gguf"
-LLAMA_MODEL_PATH=/path/to/your/models
-SD_ARGS=-m "/app/v1-5-pruned-emaonly.ckpt"
-SD_MODEL_PATH=/path/to/your/sd/models
+LLAMA_ARGS=--port 8000 --host 0.0.0.0 -n 8192 -ngl 100 -c 32768 --embedding -t 4 -m "/app/models/llama-3-8b-instruct-1048k.Q6_K.gguf"
+LLAMA_MODEL_PATH=/home/fightgpt/models
+SD_ARGS=--port 8001 --host 0.0.0.0 --model "/app/models/DynaVisionXL.safetensors" --vae "/app/models/sdxl.vae.safetensors" --scheduler euler_a
+SD_MODEL_PATH=/home/fightgpt/models
 ```
 
 Replace `your_secret_token` with your desired secret token for Nginx authentication, and update the `LLAMA_MODEL_PATH` and `SD_MODEL_PATH` variables with the appropriate paths to your models.
