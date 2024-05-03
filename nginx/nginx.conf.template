@@ -19,7 +19,7 @@ http {
     ssl_ciphers HIGH:!aNULL:!MD5;
 
     location /text/ {
-      if ($http_x_custom_token != "${NGINX_SECRET}") {
+      if ($http_x_custom_token != "NGINX_SECRET_PLACEHOLDER") {
         return 403;
       }
       proxy_pass http://llamaserver/;
@@ -30,7 +30,7 @@ http {
     }
 
     location /image/ {
-      if ($http_x_custom_token != "${NGINX_SECRET}") {
+      if ($http_x_custom_token != "NGINX_SECRET_PLACEHOLDER") {
         return 403;
       }
       proxy_pass http://sdserver/;

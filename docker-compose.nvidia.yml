@@ -22,6 +22,7 @@ services:
               capabilities: [gpu]
 
   sd:
+    restart: always
     build:
       context: ${BUILD_CONTEXT}
       dockerfile: ${SD_CUDA_DOCKERFILE}
@@ -39,7 +40,10 @@ services:
               capabilities: [gpu]
 
   nginx:
-    build: ./nginx
+    build: 
+      context: ./nginx
+      args:
+        NGINX_SECRET: ${NGINX_SECRET}
     restart: always
     ports:
       - "80:80"
