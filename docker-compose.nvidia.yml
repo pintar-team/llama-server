@@ -29,6 +29,7 @@ services:
       - "8001:8001"
     volumes:
       - "${SD_MODEL_PATH}:/app/models"
+    command: ${SD_ARGS}
     deploy:
       resources:
         reservations:
