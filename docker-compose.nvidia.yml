@@ -21,24 +21,23 @@ services:
               count: all
               capabilities: [gpu]
 
-  # sd:
-  #   build:
-  #     context: ${BUILD_CONTEXT}
-  #     dockerfile: ${SD_CUDA_DOCKERFILE}
-  #     args:
-  #       - NPROC=8
-  #   ports:
-  #     - "8080:8080"
-  #   volumes:
-  #     - "${SD_MODEL_PATH}:/app"
-  #   command: ${SD_ARGS}
-  #   deploy:
-  #     resources:
-  #       reservations:
-  #         devices:
-  #           - driver: nvidia
-  #             count: all
-  #             capabilities: [gpu]
+  sd:
+    build:
+      context: ${BUILD_CONTEXT}
+      dockerfile: ${SD_CUDA_DOCKERFILE}
+      args:
+        - NPROC=8
+    ports:
+      - "8001:8001"
+    volumes:
+      - "${SD_MODEL_PATH}:/app"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
 
   nginx:
     build: ./nginx
@@ -48,5 +47,6 @@ services:
       - "443:443"
     depends_on:
       - llama
+      - sd
     environment:
       - NGINX_SECRET=${NGINX_SECRET}

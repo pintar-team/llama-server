@@ -1,31 +1,27 @@
-ARG UBUNTU_VERSION=22.04
-ARG CUDA_VERSION=11.7.1
-ARG BASE_CUDA_DEV_CONTAINER=nvidia/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_VERSION}
-ARG BASE_CUDA_RUN_CONTAINER=nvidia/cuda:${CUDA_VERSION}-runtime-ubuntu${UBUNTU_VERSION}
+FROM nvidia/cuda:12.1.0-cudnn8-devel-ubuntu20.04
 
-FROM ${BASE_CUDA_DEV_CONTAINER} as build
+LABEL maintainer="Hugging Face"
 
-RUN apt-get update && \
-    apt-get install -y git cmake
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt update
+RUN apt install -y git libsndfile1-dev tesseract-ocr espeak-ng python3 python3-pip ffmpeg
+RUN python3 -m pip install --no-cache-dir --upgrade pip
 
-ARG CUDA_DOCKER_ARCH=all
-ARG NPROC=8
-ENV NPROC=${NPROC}
+ARG PYTORCH='2.1.1'
+ARG TORCH_VISION=''
+ARG TORCH_AUDIO=''
+ARG CUDA='cu121'
 
-ENV CUDA_DOCKER_ARCH=${CUDA_DOCKER_ARCH}
+RUN [ ${#PYTORCH} -gt 0 ] && VERSION='torch=='$PYTORCH'.*' || VERSION='torch'; python3 -m pip install --no-cache-dir -U $VERSION --extra-index-url https://download.pytorch.org/whl/$CUDA
+RUN [ ${#TORCH_VISION} -gt 0 ] && VERSION='torchvision=='TORCH_VISION'.*' || VERSION='torchvision'; python3 -m pip install --no-cache-dir -U $VERSION --extra-index-url https://download.pytorch.org/whl/$CUDA
+RUN [ ${#TORCH_AUDIO} -gt 0 ] && VERSION='torchaudio=='TORCH_AUDIO'.*' || VERSION='torchaudio'; python3 -m pip install --no-cache-dir -U $VERSION --extra-index-url https://download.pytorch.org/whl/$CUDA
 
-RUN git clone https://github.com/pintar-team/stable-diffusion.cpp.git --recursive
-WORKDIR /stable-diffusion.cpp
-RUN mkdir build
-WORKDIR /stable-diffusion.cpp/build
-RUN cmake ..
-RUN cmake .. -DSD_CUBLAS=ON && cmake --build . --config Release -j${NPROC}
+RUN python3 -m pip install --no-cache-dir git+https://github.com/facebookresearch/detectron2.git pytesseract
+RUN python3 -m pip install -U "itsdangerous<2.1.0"
 
-FROM ubuntu:$UBUNTU_VERSION as runtime
+WORKDIR /app
+COPY sd-server/server.py /app/
 
-RUN apt-get update && \
-    apt-get install -y libcurl4-openssl-dev nvidia-cuda-toolkit
+RUN python3 -m pip install --no-cache-dir -r /app/requirements.txt
 
-COPY --from=build /stable-diffusion.cpp/build/bin/server /server
-ENV LC_ALL=C.utf8
-ENTRYPOINT [ "/server" ]
+CMD ["python3", "server.py", "--port", "8001"]

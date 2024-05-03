@@ -16,6 +16,17 @@ services:
     devices:
       - /dev/dri:/dev/dri
 
+  sd:
+    build:
+      context: ${BUILD_CONTEXT}
+      dockerfile: ${SD_VK_DOCKERFILE}
+    ports:
+      - "8001:8001"
+    volumes:
+      - "${SD_MODEL_PATH}:/app"
+    devices:
+      - /dev/dri:/dev/dri
+
   nginx:
     build: ./nginx
     restart: always
@@ -24,5 +35,6 @@ services:
       - "443:443"
     depends_on:
       - llama
+      - sd
     environment:
       - NGINX_SECRET=${NGINX_SECRET}

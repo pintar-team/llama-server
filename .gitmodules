@@ -1,3 +1,6 @@
 [submodule "llama.cpp"]
 	path = llama.cpp
 	url = https://github.com/ggerganov/llama.cpp.git
+[submodule "sd-server"]
+	path = sd-server
+	url = https://github.com/pintar-team/simple-diffusion-server.git
