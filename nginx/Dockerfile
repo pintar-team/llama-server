@@ -1,13 +1,14 @@
 FROM nginx:latest
 
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf.template /etc/nginx/nginx.conf.template
 COPY cert.crt /etc/nginx/ssl/cert.crt
 COPY cert.key /etc/nginx/ssl/cert.key
+COPY entrypoint.sh /entrypoint.sh
 
-RUN sed -i "s/\${NGINX_SECRET}/${NGINX_SECRET}/g" /etc/nginx/nginx.conf
+RUN chmod +x /entrypoint.sh
+RUN mkdir -p /etc/nginx/ssl
 
 EXPOSE 80
 EXPOSE 443
 
-CMD ["nginx", "-g", "daemon off;"]
-
+ENTRYPOINT ["/entrypoint.sh"]
