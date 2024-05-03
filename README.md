@@ -1,6 +1,6 @@
-# Docker files for LLAMA (CUDA, Vulkan) Server
+# Docker files for LLAMA and Simple Diffusion Server
 
-This repository contains Docker files for running the LLAMA server with CUDA and Vulkan support.
+This repository contains Docker files for running the LLAMA server with CUDA and Vulkan support, as well as a Simple Diffusion server.
 
 ## Prerequisites
 
@@ -17,6 +17,7 @@ BUILD_CONTEXT=./
 LLAMA_CUDA_DOCKERFILE=./llama-cuda/Dockerfile
 LLAMA_VK_DOCKERFILE=./llama-vk/Dockerfile
 SD_CUDA_DOCKERFILE=./sd-cuda/Dockerfile
+SD_VK_DOCKERFILE=./sd-vk/Dockerfile
 NGINX_SECRET=your_secret_token
 LLAMA_ARGS=--port 8000 --host 0.0.0.0 -n 8192 -ngl 100 -c 32768 --embedding -t 4 -m "/app/models/llama-3-8b-instruct-1048k.Q6_K.gguf"
 LLAMA_MODEL_PATH=/home/fightgpt/models
@@ -35,13 +36,25 @@ openssl req -new -x509 -days 365 -key nginx/cert.key -out nginx/cert.crt
 
 ## Building and Running
 
-To build and run the LLAMA server with CUDA support:
+Before running the services, make sure to build the Docker images:
+
+```bash
+docker-compose -f docker-compose.nvidia.yml build
+```
+
+or
+
+```bash
+docker-compose -f docker-compose.amd.yml build
+```
+
+To build and run the LLAMA server and Simple Diffusion server with CUDA support:
 
 ```bash
 docker-compose -f docker-compose.nvidia.yml up -d --remove-orphans
 ```
 
-To build and run the LLAMA server with Vulkan support:
+To build and run the LLAMA server and Simple Diffusion server with Vulkan support:
 
 ```bash
 docker-compose -f docker-compose.amd.yml up -d --remove-orphans
@@ -63,13 +76,26 @@ docker-compose -f docker-compose.amd.yml ps
 
 ## Making Requests
 
+### LLAMA Server
+
 You can make requests to the LLAMA server using curl:
 
 ```bash
 curl --request POST \
-  --url http://localhost:8000/completion \
+  --url http://localhost:8000/text/completion \
   --header "Content-Type: application/json" \
   --data '{"prompt": "Building a website can be done in 10 simple steps:","n_predict": 128}'
+```
+
+### Simple Diffusion Server
+
+You can make requests to the Simple Diffusion server using curl:
+
+```bash
+curl --request POST \
+  --url http://localhost:8001/image/generate \
+  --header "Content-Type: application/json" \
+  --data '{"prompt": "A beautiful sunset over the ocean", "negative_prompt": "fog, mist", "num_inference_steps": 30, "guidance_scale": 7.5, "width": 512, "height": 512}'
 ```
 
 Make sure to replace `localhost` with the appropriate hostname or IP address if running the server on a different machine.
@@ -81,4 +107,6 @@ Make sure to replace `localhost` with the appropriate hostname or IP address if 
 - Adjust the `LLAMA_ARGS` and `SD_ARGS` variables in the `.env` file to customize the server and model settings.
 - Ensure that you have the necessary models in the specified `LLAMA_MODEL_PATH` and `SD_MODEL_PATH` directories.
 
-For more information on the individual Dockerfiles and their usage, please refer to the respective directories (`llama-cuda`, `llama-vk`, `sd-cuda`).
+For more information on the individual Dockerfiles and their usage, please refer to the respective directories (`llama-cuda`, `llama-vk`, `sd-cuda`, `sd-vk`).
+
+The Simple Diffusion server provides endpoints for generating images and performing image-to-image translation. Refer to the `server.py` file in the `sd-server` directory for more details on the available endpoints and their usage.
