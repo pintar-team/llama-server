@@ -1,0 +1,52 @@
+git@github.com:pintar-team/llama-server.gitversion: '3.9'
+
+services:
+  llama:
+    restart: always
+    build:
+      context: ${BUILD_CONTEXT}
+      dockerfile: ${LLAMA_CUDA_DOCKERFILE}
+      args:
+        - NPROC=8
+    ports:
+      - "8000:8000"
+    volumes:
+      - "${LLAMA_MODEL_PATH}:/app"
+    command: ${LLAMA_ARGS}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  # sd:
+  #   build:
+  #     context: ${BUILD_CONTEXT}
+  #     dockerfile: ${SD_CUDA_DOCKERFILE}
+  #     args:
+  #       - NPROC=8
+  #   ports:
+  #     - "8080:8080"
+  #   volumes:
+  #     - "${SD_MODEL_PATH}:/app"
+  #   command: ${SD_ARGS}
+  #   deploy:
+  #     resources:
+  #       reservations:
+  #         devices:
+  #           - driver: nvidia
+  #             count: all
+  #             capabilities: [gpu]
+
+  nginx:
+    build: ./nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - llama
+    environment:
+      - NGINX_SECRET=${NGINX_SECRET}
