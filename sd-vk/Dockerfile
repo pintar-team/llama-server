@@ -18,7 +18,7 @@ RUN python3 -m pip install torch==$PYTORCH torchvision==$TORCH_VISION torchaudio
 RUN python3 -m pip install --no-cache-dir --upgrade pip setuptools ninja git+https://github.com/facebookresearch/detectron2.git pytesseract "itsdangerous<2.1.0"
 
 WORKDIR /app
-COPY sd-server/server.py /app/
+COPY sd-server/ /app/
 
 RUN python3 -m pip install --no-cache-dir -r /app/requirements.txt
 RUN python3 -m pip uninstall py3nvml pynvml -y
