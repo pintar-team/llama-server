@@ -20,7 +20,7 @@ RUN python3 -m pip install --no-cache-dir git+https://github.com/facebookresearc
 RUN python3 -m pip install -U "itsdangerous<2.1.0"
 
 WORKDIR /app
-COPY sd-server/ /app/
+COPY ./sd-server /app/
 
 RUN python3 -m pip install --no-cache-dir -r /app/requirements.txt
 
