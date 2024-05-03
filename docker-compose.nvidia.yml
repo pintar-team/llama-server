@@ -20,7 +20,7 @@ services:
             - driver: nvidia
               count: all
               capabilities: [gpu]
-          cpus: 8
+          cpus: "8"
 
   sd:
     restart: always
@@ -39,7 +39,7 @@ services:
             - driver: nvidia
               count: all
               capabilities: [gpu]
-          cpus: 8
+          cpus: "8"
 
   nginx:
     build: 
