@@ -63,8 +63,9 @@ services:
     volumes:
       - ${LLAMA_MODEL_PATH}:/source/llama
       - ${SD_MODEL_PATH}:/source/sd
-      - models:/destination
-    command: sh -c "rm -rf /destination/* && cp -av /source/llama/. /destination/llama && cp -av /source/sd/. /destination/sd"
+      - models:/models
+    command: sh -c "rm -rf /models/* && cp -av /source/llama/. /models && cp -av /source/sd/. /models"
+
 
 volumes:
   models:
