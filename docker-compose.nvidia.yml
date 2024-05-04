@@ -1,5 +1,4 @@
 version: '3.9'
-
 services:
   llama:
     restart: always
@@ -11,7 +10,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - models:/app/models
+      - "${LLAMA_MODEL_PATH}:/app/models"
     command: ${LLAMA_ARGS}
     deploy:
       resources:
@@ -20,8 +19,6 @@ services:
             - driver: nvidia
               count: all
               capabilities: [gpu]
-    depends_on:
-      - populate-models
 
   sd:
     restart: always
@@ -31,7 +28,7 @@ services:
     ports:
       - "8001:8001"
     volumes:
-      - models:/app/models
+      - "${SD_MODEL_PATH}:/app/models"
     command: ${SD_ARGS}
     deploy:
       resources:
@@ -40,8 +37,6 @@ services:
             - driver: nvidia
               count: all
               capabilities: [gpu]
-    depends_on:
-      - populate-models
 
   nginx:
     build:
@@ -57,15 +52,3 @@ services:
       - sd
     environment:
       - NGINX_SECRET=${NGINX_SECRET}
-
-  populate-models:
-    image: alpine
-    volumes:
-      - ${LLAMA_MODEL_PATH}:/source/llama
-      - ${SD_MODEL_PATH}:/source/sd
-      - models:/models
-    command: sh -c "rm -rf /models/* && cp -av /source/llama/. /models && cp -av /source/sd/. /models"
-
-
-volumes:
-  models:
