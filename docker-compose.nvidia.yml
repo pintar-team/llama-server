@@ -11,7 +11,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - "${LLAMA_MODEL_PATH}:/app/models"
+      - models:/app/models
     command: ${LLAMA_ARGS}
     deploy:
       resources:
@@ -20,6 +20,8 @@ services:
             - driver: nvidia
               count: all
               capabilities: [gpu]
+    depends_on:
+      - populate-models
 
   sd:
     restart: always
@@ -29,7 +31,7 @@ services:
     ports:
       - "8001:8001"
     volumes:
-      - "${SD_MODEL_PATH}:/app/models"
+      - models:/app/models
     command: ${SD_ARGS}
     deploy:
       resources:
@@ -38,9 +40,11 @@ services:
             - driver: nvidia
               count: all
               capabilities: [gpu]
+    depends_on:
+      - populate-models
 
   nginx:
-    build: 
+    build:
       context: ./nginx
       args:
         NGINX_SECRET: ${NGINX_SECRET}
@@ -53,3 +57,14 @@ services:
       - sd
     environment:
       - NGINX_SECRET=${NGINX_SECRET}
+
+  populate-models:
+    image: alpine
+    volumes:
+      - ${LLAMA_MODEL_PATH}:/source/llama
+      - ${SD_MODEL_PATH}:/source/sd
+      - models:/destination
+    command: sh -c "rm -rf /destination/* && cp -av /source/llama/. /destination/llama && cp -av /source/sd/. /destination/sd"
+
+volumes:
+  models:
