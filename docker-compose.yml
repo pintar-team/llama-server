@@ -1,15 +1,18 @@
-version: '3'
+version: '3.9'
 
 services:
   llama:
     restart: always
     build:
-      context: ./
-      dockerfile: ./llama-cuda/Dockerfile
+      context: ${BUILD_CONTEXT}
+      dockerfile: ${LLAMA_CUDA_DOCKERFILE}
       args:
-        - NPROC=8
+        - NPROC=16
     ports:
       - "8000:8000"
+    volumes:
+      - "${LLAMA_MODEL_PATH}:/app/models"
+    command: ${LLAMA_ARGS}
     deploy:
       resources:
         reservations:
@@ -17,35 +20,36 @@ services:
             - driver: nvidia
               count: all
               capabilities: [gpu]
-    volumes:
-      - "/models/:/app"
-    command: -m "/app/westlake-7b-v2.Q5_K_M.gguf"
 
-  # sd:
-  #   build:
-  #     context: ./
-  #     dockerfile: ./sd-cuda/Dockerfile
-  #     args:
-  #       - NPROC=8
-  #   ports:
-  #     - "8080:8080"
-  #   deploy:
-  #     resources:
-  #       reservations:
-  #         devices:
-  #           - driver: nvidia
-  #             count: all
-  #             capabilities: [gpu]
-  #   volumes:
-  #     - "/models/:/app"
-  #   command: -m "/app/v1-5-pruned-emaonly.ckpt"
-  
+  sd:
+    restart: always
+    build:
+      context: ${BUILD_CONTEXT}
+      dockerfile: ${SD_CUDA_DOCKERFILE}
+    ports:
+      - "8001:8001"
+    volumes:
+      - "${SD_MODEL_PATH}:/app/models"
+    command: ${SD_ARGS}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
   nginx:
-    build: ./nginx
+    build:
+      context: ./nginx
+      args:
+        NGINX_SECRET: ${NGINX_SECRET}
     restart: always
     ports:
       - "80:80"
       - "443:443"
     depends_on:
       - llama
-
+      - sd
+    environment:
+      - NGINX_SECRET=${NGINX_SECRET}
