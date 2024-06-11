@@ -1,7 +1,6 @@
-version: '3.9'
-
 services:
   llama:
+    profiles: ["llama"]
     restart: always
     build:
       context: ${BUILD_CONTEXT}
@@ -17,6 +16,7 @@ services:
       - /dev/dri:/dev/dri
 
   sd:
+    profiles: ["sd"]
     restart: always
     build:
       context: ${BUILD_CONTEXT}
@@ -39,7 +39,9 @@ services:
       - "80:80"
       - "443:443"
     depends_on:
-      - llama
-      - sd
+      - "${ACTIVE_PROFILES}"
     environment:
       - NGINX_SECRET=${NGINX_SECRET}
+    profiles:
+      - llama
+      - sd

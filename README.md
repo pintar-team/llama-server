@@ -19,10 +19,12 @@ LLAMA_VK_DOCKERFILE=./llama-vk/Dockerfile
 SD_CUDA_DOCKERFILE=./sd-cuda/Dockerfile
 SD_VK_DOCKERFILE=./sd-vk/Dockerfile
 NGINX_SECRET=your_secret_token
-LLAMA_ARGS=--port 8000 --host 0.0.0.0 -n 8192 -ngl 100 -c 32768 --embedding -t 4 -m "/app/models/llama-3-8b-instruct-1048k.Q6_K.gguf"
+LLAMA_ARGS="--port 8000 --host 0.0.0.0 -n 8192 -ngl 100 -c 16384 --embedding -m \"/app/models/Meta-Llama-3-8B-Instruct-Q5_K_M.gguf\" "
 LLAMA_MODEL_PATH=/home/fightgpt/models
-SD_ARGS=--port 8001 --host 0.0.0.0 --model "/app/models/DynaVisionXL.safetensors" --vae "/app/models/sdxl.vae.safetensors" --scheduler euler_a
+SD_ARGS="--port 8001 --host 0.0.0.0 --model \"/app/models/DynaVisionXL.safetensors\" --vae \"/app/models/sdxl.vae.safetensors\" --scheduler euler_a"
 SD_MODEL_PATH=/home/fightgpt/models
+ENABLE_LLAMA=true
+ENABLE_SD=true
 ```
 
 Replace `your_secret_token` with your desired secret token for Nginx authentication, and update the `LLAMA_MODEL_PATH` and `SD_MODEL_PATH` variables with the appropriate paths to your models.
@@ -39,25 +41,40 @@ openssl req -new -x509 -days 365 -key nginx/cert.key -out nginx/cert.crt
 Before running the services, make sure to build the Docker images:
 
 ```bash
-docker-compose -f docker-compose.nvidia.yml build
+docker-compose -f docker-compose.nvidia.yml build llama sd
 ```
 
 or
 
 ```bash
-docker-compose -f docker-compose.amd.yml build
+docker-compose -f docker-compose.amd.yml build llama sd
 ```
 
 To build and run the LLAMA server and Simple Diffusion server with CUDA support:
 
 ```bash
-docker-compose -f docker-compose.nvidia.yml up -d --remove-orphans
+docker-compose -f docker-compose.nvidia.yml --profile llama --profile sd up -d --remove-orphans
 ```
 
 To build and run the LLAMA server and Simple Diffusion server with Vulkan support:
 
 ```bash
-docker-compose -f docker-compose.amd.yml up -d --remove-orphans
+docker-compose -f docker-compose.amd.yml up --profile llama --profile sd -d --remove-orphans
+```
+
+## Better way to build and run
+This script uses ENABLE_LLAMA and ENABLE_SD variables from .env file to determine which services to build and run.
+
+```bash
+./compose-nvidia.sh build
+./compose-nvidia.sh start
+```
+
+or
+
+```bash
+./compose-amd.sh build
+./compose-amd.sh start
 ```
 
 ## Checking Container Status
