@@ -17,7 +17,7 @@ RUN apt-get update && \
 
 # Build it
 WORKDIR /app
-COPY . .
+COPY ./llama.cpp /app
 RUN mkdir build && \
     cd build && \
     cmake .. -DLLAMA_VULKAN=1 -DLLAMA_CURL=1 && \
@@ -25,8 +25,7 @@ RUN mkdir build && \
 
 # Clean up
 WORKDIR /
-RUN cp /app/build/bin/server /server && \
-    rm -rf /app
+RUN cp /app/build/bin/server /server
 
 ENV LC_ALL=C.utf8
 
