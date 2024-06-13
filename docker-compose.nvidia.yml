@@ -31,13 +31,13 @@ services:
     volumes:
       - "${SD_MODEL_PATH}:/app/models"
     command: ${SD_ARGS}
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
+    #deploy:
+      #resources:
+        #reservations:
+          #devices:
+          #  - driver: nvidia
+          #    count: all
+          #    capabilities: [gpu]
 
   nginx:
     build:

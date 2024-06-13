@@ -79,8 +79,14 @@ case "$1" in
   status)
     container_status
     ;;
+  rebuild)
+    build_images
+    ;;
+  build)
+    build_images
+    ;;
   *)
-    echo "Usage: $0 {start|stop|restart|remove|status}"
+    echo "Usage: $0 {start|stop|restart|remove|status|rebuild|build}"
     exit 1
     ;;
 esac
