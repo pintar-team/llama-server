@@ -34,6 +34,8 @@ services:
       context: ./nginx
       args:
         NGINX_SECRET: ${NGINX_SECRET}
+        ENABLE_LLAMA: ${ENABLE_LLAMA}
+        ENABLE_SD: ${ENABLE_SD}
     restart: always
     ports:
       - "80:80"
@@ -42,6 +44,8 @@ services:
       - "${ACTIVE_PROFILES}"
     environment:
       - NGINX_SECRET=${NGINX_SECRET}
+      - ENABLE_LLAMA=${ENABLE_LLAMA}
+      - ENABLE_SD=${ENABLE_SD}
     profiles:
       - llama
       - sd

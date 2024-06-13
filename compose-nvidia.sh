@@ -20,7 +20,7 @@ export ACTIVE_PROFILES="$services"
 # Function to build the images
 build_images() {
   echo "Building the images for services: $services"
-  docker-compose -f docker-compose.nvidia.yml build $services
+  docker-compose -f docker-compose.nvidia.yml build nginx $services
 }
 
 # Function to start the containers

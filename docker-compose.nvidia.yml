@@ -31,19 +31,21 @@ services:
     volumes:
       - "${SD_MODEL_PATH}:/app/models"
     command: ${SD_ARGS}
-    #deploy:
-      #resources:
-        #reservations:
-          #devices:
-          #  - driver: nvidia
-          #    count: all
-          #    capabilities: [gpu]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
 
   nginx:
     build:
       context: ./nginx
       args:
         NGINX_SECRET: ${NGINX_SECRET}
+        ENABLE_LLAMA: ${ENABLE_LLAMA}
+        ENABLE_SD: ${ENABLE_SD}
     restart: always
     ports:
       - "80:80"
@@ -52,6 +54,8 @@ services:
       - "${ACTIVE_PROFILES}"
     environment:
       - NGINX_SECRET=${NGINX_SECRET}
+      - ENABLE_LLAMA=${ENABLE_LLAMA}
+      - ENABLE_SD=${ENABLE_SD}
     profiles:
       - llama
       - sd
