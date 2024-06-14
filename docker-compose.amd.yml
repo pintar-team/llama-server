@@ -12,7 +12,7 @@ services:
     volumes:
       - "${LLAMA_MODEL_PATH}:/app/models"
     command: ${LLAMA_ARGS}
-    device:
+    devices:
       - /dev/fdk
       - /dev/dri
     security_opt:
@@ -29,7 +29,7 @@ services:
     volumes:
       - "${SD_MODEL_PATH}:/app/models"
     command: ${SD_ARGS}
-    device:
+    devices:
       - /dev/fdk
       - /dev/dri
     security_opt:
