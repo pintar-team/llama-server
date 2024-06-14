@@ -12,8 +12,9 @@ services:
     volumes:
       - "${LLAMA_MODEL_PATH}:/app/models"
     command: ${LLAMA_ARGS}
-    devices:
-      - /dev/dri:/dev/dri
+    device:
+      - /dev/fdk
+      - /dev/dri
 
   sd:
     profiles: ["sd"]
