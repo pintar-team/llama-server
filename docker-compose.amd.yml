@@ -29,8 +29,11 @@ services:
     volumes:
       - "${SD_MODEL_PATH}:/app/models"
     command: ${SD_ARGS}
-    devices:
-      - /dev/dri:/dev/dri
+    device:
+      - /dev/fdk
+      - /dev/dri
+    security_opt:
+      - seccomp:unconfined
 
   nginx:
     build: 
