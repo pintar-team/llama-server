@@ -7,15 +7,21 @@ set +a
 
 
 services=""
+export LLAMA_DEPENDENCY_PLACEHOLDER="llama"
+export SD_DEPENDENCY_PLACEHOLDER="sd"
 if [ "$ENABLE_LLAMA" = "true" ]; then
   services="$services llama"
+else
+  export LLAMA_DEPENDENCY_PLACEHOLDER="dummy"
 fi
 if [ "$ENABLE_SD" = "true" ]; then
   services="$services sd"
+else
+  export SD_DEPENDENCY_PLACEHOLDER="dummy"
 fi
+
 #remove the first space
 services="${services# }"
-export ACTIVE_PROFILES="$services"
 
 # Function to build the images
 build_images() {

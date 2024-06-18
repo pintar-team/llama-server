@@ -38,6 +38,10 @@ services:
             - driver: nvidia
               count: all
               capabilities: [gpu]
+  
+  dummy:
+    image: busybox
+    command: tail -f /dev/null
 
   nginx:
     build:
@@ -51,7 +55,8 @@ services:
       - "80:80"
       - "443:443"
     depends_on:
-      - "${ACTIVE_PROFILES}"
+      - ${LLAMA_DEPENDENCY_PLACEHOLDER}
+      - ${SD_DEPENDENCY_PLACEHOLDER}
     environment:
       - NGINX_SECRET=${NGINX_SECRET}
       - ENABLE_LLAMA=${ENABLE_LLAMA}

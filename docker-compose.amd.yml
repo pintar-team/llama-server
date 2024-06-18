@@ -40,7 +40,11 @@ services:
       - /dev/kfd
     security_opt:
       - seccomp:unconfined
-
+  
+  dummy:
+    image: busybox
+    command: tail -f /dev/null
+    
   nginx:
     build: 
       context: ./nginx
@@ -53,7 +57,8 @@ services:
       - "80:80"
       - "443:443"
     depends_on:
-      - "${ACTIVE_PROFILES}"
+      - ${LLAMA_DEPENDENCY_PLACEHOLDER}
+      - ${SD_DEPENDENCY_PLACEHOLDER}
     environment:
       - NGINX_SECRET=${NGINX_SECRET}
       - ENABLE_LLAMA=${ENABLE_LLAMA}
