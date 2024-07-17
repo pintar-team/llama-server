@@ -10,7 +10,7 @@ ARG NPROC=8
 ENV NPROC=${NPROC}
 
 RUN apt-get update && \
-    apt-get install -y build-essential git libcurl4-openssl-dev cmake
+    apt-get install -y build-essential libgomp1 git libcurl4-openssl-dev cmake
 
 ENV CUDA_DOCKER_ARCH=${CUDA_DOCKER_ARCH}
 ENV LLAMA_CUDA=1
