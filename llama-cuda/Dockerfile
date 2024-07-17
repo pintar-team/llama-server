@@ -28,8 +28,8 @@ RUN apt-get update && \
 
 WORKDIR /
 
-COPY --from=build /app/server /server
+COPY --from=build /app/llama-server /llama-server
 
 ENV LC_ALL=C.utf8
 
-ENTRYPOINT ["/server"]
+ENTRYPOINT ["/llama-server"]
