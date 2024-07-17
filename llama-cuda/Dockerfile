@@ -24,7 +24,7 @@ RUN make clean && make -j${NPROC}
 FROM ${BASE_CUDA_RUN_CONTAINER} as runtime
 
 RUN apt-get update && \
-    apt-get install -y libcurl4-openssl-dev
+    apt-get install -y libcurl4-openssl-dev libgomp1
 
 WORKDIR /
 

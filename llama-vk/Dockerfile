@@ -13,7 +13,7 @@ RUN wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | apt-key 
 
 # Install cURL
 RUN apt-get update && \
-    apt-get install -y libcurl4-openssl-dev
+    apt-get install -y libcurl4-openssl-dev libgomp1
 
 # Build it
 WORKDIR /app
