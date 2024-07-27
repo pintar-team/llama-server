@@ -75,19 +75,12 @@ calculate_stats() {
     echo "$min $max $avg"
 }
 
-# Function to format number according to locale
-format_number() {
-    printf "%'.2f" "$1" | sed 's/\./,/g'
-}
-
 # Print results
 print_results() {
     local title=$1
     local stats=$2
     printf "%-25s %-10s %-10s %-10s\n" "$title" "Min" "Max" "Avg"
-    echo "$stats" | while read -r min max avg; do
-        printf "%-25s %-10s %-10s %-10s\n" "$title" "$(format_number "$min")" "$(format_number "$max")" "$(format_number "$avg")"
-    done
+    echo "$stats" | awk '{printf "%-25s %-10s %-10s %-10s\n", "'"$title"'", sprintf("%.2f", $1), sprintf("%.2f", $2), sprintf("%.2f", $3)}'
 }
 
 echo "Benchmark Results:"
