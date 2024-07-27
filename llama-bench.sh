@@ -27,11 +27,10 @@ while getopts "u:p:n:r:h" opt; do
     esac
 done
 
-# Check if jq is installed
-if ! command -v jq &> /dev/null; then
-    echo "Error: jq is not installed. Please install jq to run this script."
-    exit 1
-fi
+# Function to extract tokens_predicted from JSON response
+extract_tokens_predicted() {
+    echo "$1" | grep -o '"tokens_predicted":[0-9]*' | cut -d':' -f2
+}
 
 # Function to run a single benchmark
 run_benchmark() {
@@ -41,9 +40,9 @@ run_benchmark() {
         -d "{\"prompt\": \"$PROMPT\", \"n_predict\": $N_PREDICT}")
     end_time=$(date +%s.%N)
 
-    tokens_predicted=$(echo "$response" | jq '.tokens_predicted')
+    tokens_predicted=$(extract_tokens_predicted "$response")
     elapsed_time=$(echo "$end_time - $start_time" | bc)
-    tokens_per_second=$(echo "$tokens_predicted / $elapsed_time" | bc)
+    tokens_per_second=$(echo "scale=2; $tokens_predicted / $elapsed_time" | bc)
 
     echo "$elapsed_time $tokens_predicted $tokens_per_second"
 }
