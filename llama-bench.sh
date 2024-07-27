@@ -4,7 +4,7 @@
 URL="http://localhost:8000/completion"
 PROMPT="Building a website can be done in 10 simple steps:"
 N_PREDICT=512
-NUM_RUNS=16
+NUM_RUNS=4
 
 # Function to print usage
 print_usage() {
@@ -41,8 +41,8 @@ run_benchmark() {
     end_time=$(date +%s.%N)
 
     tokens_predicted=$(extract_tokens_predicted "$response")
-    elapsed_time=$(echo "$end_time - $start_time" | bc)
-    tokens_per_second=$(echo "scale=2; $tokens_predicted / $elapsed_time" | bc)
+    elapsed_time=$(echo "$end_time - $start_time" | bc -l)
+    tokens_per_second=$(echo "scale=2; $tokens_predicted / $elapsed_time" | bc -l)
 
     echo "$elapsed_time $tokens_predicted $tokens_per_second"
 }
@@ -66,13 +66,18 @@ calculate_stats() {
 
     for item in "${arr[@]}"; do
         value=$(echo "$item" | awk "{print \$$field}")
-        sum=$(echo "$sum + $value" | bc)
+        sum=$(echo "$sum + $value" | bc -l)
         if (( $(echo "$value < $min" | bc -l) )); then min=$value; fi
         if (( $(echo "$value > $max" | bc -l) )); then max=$value; fi
     done
 
-    avg=$(echo "scale=2; $sum / ${#arr[@]}" | bc)
+    avg=$(echo "scale=2; $sum / ${#arr[@]}" | bc -l)
     echo "$min $max $avg"
+}
+
+# Function to format number according to locale
+format_number() {
+    printf "%'.2f" "$1" | sed 's/\./,/g'
 }
 
 # Print results
@@ -81,7 +86,7 @@ print_results() {
     local stats=$2
     printf "%-25s %-10s %-10s %-10s\n" "$title" "Min" "Max" "Avg"
     echo "$stats" | while read -r min max avg; do
-        printf "%-25s %-10.2f %-10.2f %-10.2f\n" "$title" "$min" "$max" "$avg"
+        printf "%-25s %-10s %-10s %-10s\n" "$title" "$(format_number "$min")" "$(format_number "$max")" "$(format_number "$avg")"
     done
 }
 
